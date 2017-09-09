@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>登录</title>
+		<link type="text/css" rel="stylesheet" href="css/index.css">
+		<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+		<link type="text/css" rel="stylesheet" href="css/common.css">
+	</head>
+	<body>
+		<div class="banner_title">
+			<i class="lw_sign"></i>
+			<span class="banner_text">会员中心</span>
+		</div>
+		<div class="login_body">
+			<div class="focus_part" id="focus_part">
+				<div class="focus_img active">
+					<a href="#"><img src="img/1.jpg"></a>
+				</div>
+				<div class="focus_img">
+					<a href="#"><img src="img/2.jpg"></a>
+				</div>
+				<div class="focus_img">
+					<a href="#"><img src="img/3.jpg"></a>
+				</div>
+				<div class="focus_img">
+					<a href="#"><img src="img/4.jpg"></a>
+				</div>
+				<div class="focus_point_part" id="focus_point_part">
+					<div class="focus_point_button active"></div>
+					<div class="focus_point_button"></div>
+					<div class="focus_point_button"></div>
+					<div class="focus_point_button"></div>
+				</div>
+			</div>
+			<div class="login_part">
+				<div class="login_frame">
+					<div class="el-tabs__header">
+						<div class="el-tabs__nav" id="login_tab">
+							<div class="el-tabs__active-bar" style="width: 88px; transform: translateX(0px);"></div>
+							<div class="el-tabs__item is-active" name="psd">密码登录</div><div class="el-tabs__item" name="ver">验证码登录</div>
+						</div>
+					</div>
+					<div class="login_frame_item active" name="psd">
+						<p class="login_label_text">账户</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="邮箱/手机号/账号" type="text"  validateevent="true" class="el-input__inner" id="login_act">
+						</div>
+						<p class="login_label_text">密码</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="请输入内容" type="password" validateevent="true" class="el-input__inner" id="login_psd">
+						</div>
+					</div>
+					<div class="login_frame_item" name="ver">
+						<p class="login_label_text">手机号</p>
+						<div class="el-input el-input-group el-input-group--append">
+							<input autocomplete="off" placeholder="您注册的手机号" type="text"  rows="2"  validateevent="true" class="el-input__inner" id="login_mobile">
+							<div class="el-input-group__append">
+								<button class="el-button el-button-ver" id="ver_button" :disabled="">发送验证码</button>
+							</div>
+						</div>
+						<p class="login_label_text">验证码</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="短信验证码" type="text"  validateevent="true" class="el-input__inner" id="login_ver">
+						</div>
+					</div>
+				</div>
+				<button class="login_button el-button el-button--primary" id="login_btn">登录</button>
+				<div class="explain_text" style="text-align:right;">
+					<a class="handle_text" href="#">忘记密码</a>&nbsp;|&nbsp;<a class="handle_text" href="#">免费注册</a>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/login.js"></script> 
+	</body>
+</html>

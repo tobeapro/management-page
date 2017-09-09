@@ -1,0 +1,55 @@
+new Vue({
+	el:"#app",
+	data:function(){
+		return{
+	        active: 2,
+	        newPwd:"",
+	        confirmPwd:"",
+	        pwdErrorText:"",
+       		pwdErrorStatus:false,
+       		fullscreenLoading:false
+		}
+	},
+	methods:{
+		//邮件重置密码接口
+		mailConfirmPwd:function(){
+			var _this=this;
+	      	if(_this.newPwd.length<6){
+				_this.pwdErrorText="密码长度要大于6";
+				_this.pwdErrorStatus=true;
+				return
+			}
+			if(_this.newPwd!==_this.confirmPwd){
+				_this.pwdErrorText="两次输入密码不一致";
+				_this.pwdErrorStatus=true;
+				return
+			}
+			_this.fullscreenLoading=true;
+			var data={"password":_this.newPwd}
+			axios.post("/accountPwd/sendMail",data)
+			.then(function(res){
+				if(res.status===0){
+					_this.active++;
+					return;
+				}else{
+					_this.fullscreenLoading=false;
+					_this.$message.error('修改失败');
+					return	
+				}
+			})
+			.catch(function(err){
+				_this.fullscreenLoading=false;
+				_this.$message.error('修改失败');
+				return				
+			})
+		}
+	},
+	watch:{
+		newPwd:function(){
+    		this.pwdErrorStatus=false;
+    	},
+    	confirmPwd:function(){
+    		this.pwdErrorStatus=false;
+    	}
+	}
+})

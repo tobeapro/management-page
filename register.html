@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>注册</title>
+		<link type="text/css" rel="stylesheet" href="css/index.css">
+		<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+		<link type="text/css" rel="stylesheet" href="css/common.css">
+	</head>
+	<body>
+		<div class="banner_title">
+			<i class="lw_sign"></i>
+			<span class="banner_text">注册会员</span>
+		</div>		
+		<div id="app" v-cloak>
+			<div v-if="!registerStatus">
+				<div class="remind_title">此处显示注册提示内容</div>
+				<div class="form_item"> 
+					<div class="form_child">
+						<label class="form_child_label">用户名</label>
+						<div class="form_child_input">
+							<input class="el-input__inner" v-model="userInfo.userName" @blur="nameBlur">
+						</div>
+						<span class="has-error-text3" v-if="userErrorStatus">{{userErrorText}}</span>
+					</div>			
+					<div class="form_child">
+						<label class="form_child_label">邮箱</label>
+						<div class="form_child_input">
+							<input class="el-input__inner" v-model="userInfo.mail" @blur="mailBlur">					 
+						</div>
+						<span class="has-error-text3" v-if="mailErrorStatus">{{mailErrorText}}</span>
+					</div>
+					<div class="form_child">
+						<label class="form_child_label">手机</label>
+						<div class="form_child_input el-input el-input-group el-input-group--append" style="width:350px;">
+							<input class="el-input__inner" v-model="userInfo.mobile" @blur="mobileBlur">
+							<div class="el-input-group__append">
+								<button class="el-button el-button-ver" :disabled="msgVerTimerStatus" @click="sendMsgVer">{{msgVerTimerText}}</button>
+							</div>
+						</div>
+						<span class="has-error-text3" v-if="mobileErrorStatus">{{mobileErrorText}}</span>
+					</div>
+					<div class="form_child">
+						<label class="form_child_label">短信验证码</label>
+						<div class="form_child_input">
+							<input class="el-input__inner" v-model="userInfo.msgVer">					 
+						</div>
+						<span class="has-error-text3" v-if="msgVerErrorStatus">{{msgVerErrorText}}</span>
+					</div>
+					<div class="form_child">
+						<label class="form_child_label">登录密码</label>
+						<div class="form_child_input">
+							<input class="el-input__inner" type="password" v-model="userInfo.pwd">
+						</div>
+						<span class="has-error-text3" v-if="pwdErrorStatus">{{pwdErrorText}}</span>
+					</div>
+					<div class="form_child">
+						<label class="form_child_label">确认密码</label>
+						<div class="form_child_input">
+							<input class="el-input__inner" type="password" v-model="userInfo.cfmPwd">
+						</div>
+						<span class="has-error-text3" v-if="cfmPwdErrorStatus">{{cfmPwdErrorText}}</span>
+					</div>
+					<div class="form_child">
+						<label class="form_child_label">服务条款</label>
+						<div class="form_child_input">
+							<template>
+							  <el-checkbox v-model="checked">我同意<span style="color:#20a0ff">《会员系统》</span>条款内容</el-checkbox>
+							</template>
+						</div>
+					</div>
+					<div class="submit_part">
+						<el-button type="primary" :disabled="!checked" @click="registerUser()" v-loading.fullscreen.lock="fullscreenLoading">注册</el-button>
+					</div>				
+				</div>
+			</div>
+			<div class="find_frame_part" v-if="registerStatus">
+				<p class="find_text" style="margin-top:60px;text-align:center;font-size:16px;"><i class="el-icon-check"></i>用户已注册成功！</p>
+				<p class="find_text" style="text-align:center;"><a href="#">去登陆</a></p>
+			</div>
+		</div>
+		<script src="js/vue.js"></script> 
+		<script src="js/index.js"></script>	
+		<script src="js/axios.js"></script>
+		<script src="js/register.js"></script>
+	</body>
+</html>

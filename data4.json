@@ -1,0 +1,30 @@
+{
+    "status": 0,
+    "data":[
+        {
+            "id": 1,
+            "remark": "测试系统",
+            "systemName": "测试系统",
+            "defaultSystem": false,
+            "accountCount": 8,
+            "systemNumber": 11
+        },
+        {
+            "id": 2,
+            "remark": "龙文钢材网",
+            "systemName": "龙文网",
+            "defaultSystem": false,
+            "accountCount": 1,
+            "systemNumber": 111
+        },
+        {
+            "id": 3,
+            "remark": "会员系统，仅供测试使用",
+            "systemName": "会员系统",
+            "defaultSystem": true,
+            "accountCount": 1,
+            "systemNumber": 12
+        }
+    ],
+    "msg": "find success"
+}

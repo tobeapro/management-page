@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>会员管理</title>
+		<link type="text/css" rel="stylesheet" href="css/index.css">
+		<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+		<link type="text/css" rel="stylesheet" href="css/common.css">
+	</head>
+	<body>
+		<div id="app"  v-cloak   v-loading="fullscreenLoading" style="height:100%;">
+			<div class="banner_title">
+				<i class="lw_sign"></i>
+				<span class="banner_text">会员管理</span>
+				<div class="admin_out">
+					<i class="checkout_icon"></i>退出
+				</div>
+			</div>
+			<div class="main_left">
+				<ul class="center_tab">
+					<li v-bind:class="{active: isActive}" @click="changeStatus(isActive)"><i class="admin_mag tab-item"></i>系统管理</li>
+					<li v-bind:class="{active: !isActive}" @click="loadApplyList(!isActive)"><i class="limit_mag tab-item"></i>权限审核</li>
+				</ul>
+			</div>	
+			<div class="main_right">
+				<div v-if="isActive">
+					<div v-if="sysStatus">
+						<div class="remind_title2">
+							子系统列表
+							<el-button type="primary" size="small" icon="search" @click="addChildSys()" style="position:absolute;right:0;top:-10px;">添加</el-button>
+						</div>
+						 <el-table ref="singleTable" :data="tableData"  style="width: 100%">
+						    <el-table-column type="index" width="50">
+						    </el-table-column>
+						    <el-table-column property="systemName" label="系统名称" width="160">
+						    </el-table-column>
+						    <el-table-column property="systemNumber" label="系统编码" width="160">
+						    </el-table-column>
+						    <el-table-column property="remark" label="说明" min-width="240">
+						    </el-table-column>
+						    <el-table-column label="操作" width="120">
+						      <template scope="scope">
+						        <el-button size="small" @click=editChildSys(scope.row)>编辑</el-button>
+						      </template>
+						    </el-table-column>
+						  </el-table>
+					 </div>
+					 <div v-if="!sysStatus">
+					 	<div v-if="sysHandleStatus">
+						 	<div class="remind_title2">
+								添加子系统
+								<el-button type="primary" size="small" icon="search" @click="sysStatus=!sysStatus" style="position:absolute;right:0;top:-10px;">返回</el-button>
+							</div>
+							<form class="form_item">
+					    		<div class="form_child">
+									<label class="form_child_label">系统名</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" v-model="newName" @blur="sysNameBlur">
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">系统编码</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" v-model="newCode" @blur="sysCodeBlur">
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">是否为默认系统</label>
+									<div class="form_child_input">
+										<el-switch  v-model="newStatus" on-text="是" off-text="否" on-color="#13ce66"></el-switch>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">说明</label>
+									<div class="form_child_input">
+										<textarea class="el-textarea__inner" v-model="newRemark" style="height:100px;resize:none;"></textarea>
+									</div>
+								</div>
+								<div class="submit_part">
+									<el-button type="primary" @click="saveNewSys()">保存</el-button>
+								</div>
+					    	</form>
+				    	</div>
+				    	<div v-if="!sysHandleStatus">
+						 	<div class="remind_title2">
+								编辑子系统
+								<el-button type="primary" size="small" icon="search" @click="sysStatus=!sysStatus" style="position:absolute;right:0;top:-10px;">返回</el-button>
+							</div>
+							<form class="form_item">
+					    		<div class="form_child">
+									<label class="form_child_label">系统名</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" v-model="newName" @blur="sysNameBlur(oldName)">
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">系统编码</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" v-model="newCode" @blur="sysCodeBlur(oldCode)">
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">是否为默认系统</label>
+									<div class="form_child_input">
+										<el-switch  v-model="newStatus" on-text="是" off-text="否" on-color="#13ce66"></el-switch>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">说明</label>
+									<div class="form_child_input">
+										<textarea class="el-textarea__inner"  v-model="newRemark" style="height:100px;resize:none;"></textarea>
+									</div>
+								</div>
+								<div class="submit_part">
+									<el-button type="primary" @click="saveEditSys(oldId)">保存</el-button>
+									<el-button @click="sysStatus=!sysStatus">取消</el-button>
+								</div>
+					    	</form>
+				    	</div>
+					 </div>
+				</div>
+				<div v-if="!isActive">
+					<div v-show="requsetStatus" v-loading="screenLoading">
+						<div class="remind_title2">申请列表</div>
+						<el-table ref="singleTable" :data="applyData"  style="width: 100%">
+						    <el-table-column type="index" width="50">
+						    </el-table-column>
+						    <el-table-column property="applyNumber" label="申请单号" width="200">
+						      <template scope="scope">
+						        <a href="javascript:void(0)" @click="checkApply(scope.row)">{{scope.row.applyNumber}}</a>
+						      </template>
+						    </el-table-column>
+						    <el-table-column property="applySystemName" label="子系统名称" >
+						    </el-table-column>
+						    <el-table-column property="applyUserName" label="申请账户">
+						    </el-table-column>
+						    <el-table-column property="contactPeople" label="联系人" width="120">
+						    </el-table-column>
+						    <el-table-column property="applyTime" label="申请时间" width="160">
+						    </el-table-column>
+						    <el-table-column property="auditStatus" label="状态" width="160">
+						      <template scope="scope">
+						        <div v-if="scope.row.auditStatus===null"><i class="limit_process"></i>待审核</div>
+						        <div v-if="scope.row.auditStatus===true"><i class="limit_pass"></i>审核成功</div>
+						        <div v-if="scope.row.auditStatus===false"><i class="limit_fail"></i>审核失败</div>
+						      </template>
+						    </el-table-column>
+						    <el-table-column label="操作" width="120">
+						      <template scope="scope">
+						        <el-button v-if="scope.row.auditStatus===null" size="small" @click=auditApply(scope.row.applyNumber)>审核</el-button>
+						      </template>
+						    </el-table-column>
+						  </el-table>
+					</div>
+					<div v-show="!requsetStatus">
+						<div class="el-tabs__header">
+							<div class="el-tabs__nav">
+								<div class="el-tabs__active-bar" style="width: 88px; transform: translateX(0px);"></div>
+								<div class="el-tabs__item is-active">申请详情</div>								
+							</div>
+							<el-button type="primary" size="small" icon="search" @click="requsetStatus=!requsetStatus" style="position:absolute;right:0;top:8px;">返回</el-button>
+						</div>
+						<form class="form_item2"> 	
+							<div class="remind_title3">
+								基本信息
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">申请单号</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.applyNumber}}
+								</div>
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">系统名称</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.applySystemName}}
+								</div>
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">申请账户</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.applyUserName}}
+								</div>
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">申请人</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.contactPeople}}
+								</div>
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">申请时间</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.applyTime}}
+								</div>
+							</div>
+							<div class="form_child2">
+								<label class="form_child_label">状态</label>
+								<div class="form_child_content2">
+									{{applyDetailInfo.auditStatus|auditLimit}}
+								</div>
+							</div>
+							<div class="remind_title3">
+								子系统信息	
+							</div>
+							<div class="form_child2" v-for="(value,index) in childSysInfo">
+								<label class="form_child_label">{{value.name|infoFilter}}</label>
+								<div class="form_child_content2">
+									{{value.value}}								
+								</div>
+							</div>
+							<div class="form_child2" v-if="childSysInfo===null||childSysInfo===undefined">
+								<label class="form_child_label">无</label>
+							</div>
+							 <el-button v-if="applyDetailInfo.auditStatus===null" @click=auditApply(applyNumber) style="margin-left:100px;margin-top:20px;">审核</el-button>
+						</form>	
+					</div>
+				</div>
+			</div>
+			<el-dialog title="审核" :visible.sync="dialogFormVisible">
+			  <audit-radio :num="auditNum" @radio-monitor="changeAuditRadio"></audit-radio>
+			  <audit-remark :text="auditText" @remark-monitor="changeAuditRemark"></audit-remark>
+			  <div slot="footer" class="dialog-footer">
+			    <el-button @click="dialogFormVisible = false">取 消</el-button>
+			    <el-button type="primary" @click="confirmApply(applyNumber,auditNum,auditText)">确 定</el-button>
+			  </div>
+			</el-dialog>
+		</div>
+		<script src="js/vue.js"></script> 
+		<script src="js/axios.js"></script>
+		<script src="js/index.js"></script>	
+		<script src="js/manage.js"></script>
+	</body>
+</html>

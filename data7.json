@@ -1,0 +1,18 @@
+{
+    "status": 0,
+    "msg": "success",
+    "data":[
+        {
+            "name": "userName",
+            "value": "yangbo"
+        },
+        {
+            "name": "email",
+            "value": "2466054610@qq.com"
+        },
+        {
+            "name": "mobliePhone",
+            "value": "13629745391"
+        }
+    ]
+}

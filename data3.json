@@ -1,0 +1,36 @@
+{
+    "status": 0,
+    "msg": "success",
+    "data":[       
+        {
+            "column": "business_number",
+            "property": "工商编号",
+            "type": "input",
+            "content":""
+        },
+        {
+            "column": "concact_tel",
+            "property": "联系电话",
+            "type": "input",
+            "content":""
+        },
+        {
+            "column": "business_license",
+            "property": "营业执照",
+            "type": "img",
+            "content":""
+        },
+        {
+            "column": "something_column",
+            "property": "某个选项",
+            "type": "radio",
+            "content":""
+        },      
+        {
+            "column": "introduce",
+            "property": "简介",
+            "type": "textarea",
+            "content":""
+        }
+    ]
+}

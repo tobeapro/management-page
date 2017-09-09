@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>找回密码</title>
+		<link type="text/css" rel="stylesheet" href="css/index.css">
+		<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+		<link type="text/css" rel="stylesheet" href="css/common.css">
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<div class="banner_title">
+				<i class="lw_sign"></i>
+				<span class="banner_text">找回密码</span>
+				<div class="admin_out">
+					<i class="checkout_icon"></i>退出
+				</div>
+			</div>
+			<el-steps :space="100" :active="active" finish-status="success">
+			  <el-step title="找回方式"></el-step>
+			  <el-step title="验证"></el-step>
+			  <el-step title="密码重设"></el-step>
+			</el-steps>
+			<div class="find_part">
+				<div v-if="this.active===0">
+					<p style="font-size:14px;margin:60px auto 30px;">请选择找回方式,若下列方式均已停用,请联系人工客服更改密码:</p>
+					<el-radio class="radio" v-model="radio" label="1">注册手机</el-radio>
+	  				<el-radio class="radio" v-model="radio" label="2">注册邮箱</el-radio>
+	  				<div class="edit_part">
+	  					<el-button type="primary" style="margin-top: 12px;" @click="next(radio)">下一步</el-button>
+	  				</div>
+				</div>
+				<div v-if="this.active===1">
+					<div class="find_frame_part" v-if="way">
+						<p class="find_text">手机号</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="您的注册手机号" type="text"  validateevent="true" class="el-input__inner" v-model="tel" :class=[{"has-error":phoneErrorStatus}]>
+							<span class="has-error-text" v-if="phoneErrorStatus">{{phoneErrorText}}</span>
+						</div>						
+						<p class="find_text">验证</p>
+						<div class="el-input el-input-group el-input-group--append">
+							<input autocomplete="off" placeholder="请输入右侧图片的验证码" type="text"  validateevent="true" class="el-input__inner" v-model="imgVer">
+							<span class="has-error-text" v-if="imgVerErrorStatus">{{imgVerErrorText}}</span>
+							<div class="el-input-group__append">
+								<img style="height:30px;cursor:pointer" :src="imgUrl" @click="changeImgUrl">
+							</div>
+						</div>
+						<p class="find_text">短信验证码</p>
+						<div class="el-input el-input-group el-input-group--append">
+							<input autocomplete="off" placeholder="请输入手机短信中的验证码" type="text"  validateevent="true" class="el-input__inner" v-model="msgVer">
+							<span class="has-error-text" v-if="msgVerErrorStatus">{{msgVerErrorText}}</span>
+							<div class="el-input-group__append">
+								<button class="el-button el-button-ver" id="ver_button" @click="sendVerCode" :disabled="msgVerTimerStatus">{{msgVerTimerText}}</button>
+							</div>
+						</div>
+						<div class="edit_part">
+							<el-button type="primary" style="margin-top: 12px;" @click="telFindPwd" type="submit" :disabled="telFindPwdStatus"  v-loading.fullscreen.lock="fullscreenLoading">下一步</el-button>
+							<el-button style="margin-top: 12px;margin-right:20px;" @click="prev">上一步</el-button>
+						</div>
+					</div>	
+					<div class="find_frame_part" v-if="!way">
+						<p class="find_text">邮箱</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="请输入您的注册邮箱" type="text"  validateevent="true" class="el-input__inner" v-model="mail" :class=[{"has-error":mailErrorStatus}]>
+							<span class="has-error-text" v-if="mailErrorStatus">{{mailErrorText}}</span>
+						</div>
+						<div class="edit_part">
+							<el-button type="primary" style="margin-top: 12px;" @click="sendVerMail" v-loading.fullscreen.lock="fullscreenLoading">验证邮箱</el-button>
+							<el-button style="margin-top: 12px;margin-right:20px;" @click="prev">上一步</el-button>
+						</div>
+					</div>
+				</div>
+				<div v-if="this.active===2">
+					<div class="find_frame_part" v-if="way">
+						<p class="find_text">新密码</p>
+						<div class="el-input el-input-group">
+							<input autocomplete="off" placeholder="输入不小于6位的新密码" type="password"  validateevent="true" class="el-input__inner" v-model="newPwd" :class=[{"has-error":pwdErrorStatus}]>
+							<span class="has-error-text" v-if="pwdErrorStatus">{{pwdErrorText}}</span>
+						</div>
+						<p class="find_text">再次输入新密码</p>
+						<div class="el-input el-input-group el-input-group--append">
+							<input autocomplete="off" placeholder="再次输入相同的密码" type="password"  validateevent="true" class="el-input__inner" v-model="confirmPwd">
+						</div>	
+						<div class="edit_part">
+							<el-button type="primary" style="margin-top: 12px;" @click="msgConfirmPwd" v-loading.fullscreen.lock="fullscreenLoading">完成</el-button>
+						</div>						
+					</div>	
+					<div class="find_frame_part" v-if="!way">
+						<p class="find_text" style="text-align:center;">密码重设邮件已发送!请根据邮件提示记性操作</p>
+						<p class="find_text" style="text-align:center;">若未收到邮件,请检查"垃圾邮箱"或尝试其他方式找回密码</p>
+					</div>
+				</div>
+				<div v-if="this.active===3">
+				</div>
+			</div>
+		</div>
+		<script src="js/vue.js"></script> 		
+		<script src="js/axios.js"></script>
+		<script src="js/index.js"></script>	
+		<script src="js/findPwd.js"></script>
+	</body>
+</html>

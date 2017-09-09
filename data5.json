@@ -1,0 +1,48 @@
+{
+    "status": 0,
+    "msg": "success",
+    "data":{
+    "dataList":[
+        {
+            "id": 2,
+            "applyNumber": "201112",
+            "applySystemName": "测试系统",
+            "applyUserName": "yangbo",
+            "contactPeople": "test",
+            "applyTime": 1502092099000,
+            "auditStatus": null
+        },
+        {
+            "id": 1,
+            "applyNumber": "201111",
+            "applySystemName": "测试系统",
+            "applyUserName": "yangbo",
+            "contactPeople": "test",
+            "applyTime": 1502092075000,
+            "auditStatus": false
+        },
+        {
+            "id": 4,
+            "applyNumber": "17080810050546701",
+            "applySystemName": "测试系统",
+            "applyUserName": "yangbo",
+            "contactPeople": "test",
+            "applyTime": 1502157905000,
+            "auditStatus": null
+        },
+        {
+            "id": 3,
+            "applyNumber": "201113",
+            "applySystemName": "龙文网",
+            "applyUserName": "yangbo",
+            "contactPeople": "test",
+            "applyTime": 1502092739000,
+            "auditStatus": true
+        }
+    ],
+    "pageNo": 1,
+    "pageSize": 15,
+    "total": 4,
+    "pages": 1
+    }
+}

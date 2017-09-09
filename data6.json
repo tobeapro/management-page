@@ -1,0 +1,20 @@
+{
+    "status": 0,
+    "msg": "success",
+    "data":{
+        "applyFailCause": null,
+        "data":[
+            {
+                "name": "businessNumber",
+                "value": "no.11233455"
+            },
+            {
+                "name": "contactPeople",
+                "value": "test"
+            }
+        ],
+        "applyTime": "2017-08-08 10:05:05",
+        "applyOrderNum": "17080810050546701",
+        "applyStatus": 1
+    }
+}

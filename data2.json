@@ -1,0 +1,32 @@
+{
+"status":0,
+"userInfo":[{
+	 	"name":"userName",
+	 	"value":"张三",
+	 	"isLocked":true
+	 },{
+	 	"name":"mobliePhone",
+	 	"value":13955512345,
+	 	"isLocked":true
+	 },{
+	 	"name":"email",
+	 	"value":"cqlw@aaa.com",
+	 	"isLocked":true
+	 },{
+	 	"name":"companyName",
+	 	"value":"重庆文迅科技股份有限公司",
+	 	"isLocked":false
+	 },{
+	 	"name":"contactPeople",
+	 	"value":"李四",
+	 	"isLocked":false
+	 },{
+	 	"name":"address",
+	 	"value":"重庆市大渡口区",
+	 	"isLocked":false
+	 },{
+	 	"name":"contactTel",
+	 	"value":18755512345,
+	 	"isLocked":false
+	 }]
+}

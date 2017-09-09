@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html style="height:100%">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>会员中心</title>
+		<link type="text/css" rel="stylesheet" href="css/index.css">
+		<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+		<link type="text/css" rel="stylesheet" href="css/common.css">
+	</head>
+	<body style="height:100%">
+		<div id="app" v-cloak>
+			<div class="banner_title">
+				<i class="lw_sign"></i>
+				<span class="banner_text">会员中心</span>
+				<div class="admin_out">
+					<i class="checkout_icon"></i>退出
+				</div>
+			</div>
+			<div class="main_left">
+				<ul class="center_tab">
+					<li v-bind:class="{active: isActive}" @click="changeStatus(isActive)"><i class="admin_mag tab-item"></i>账户管理</li>
+					<li v-bind:class="{active: !isActive}" @click="changeStatus(!isActive)"><i class="limit_mag tab-item"></i>权限管理</li>
+				</ul>
+			</div>	
+			<div class="main_right">
+				<div v-show="isActive">
+					<template>
+					  <el-tabs v-model="activeName">
+					    <el-tab-pane label="我的资料" name="first">	
+					    	<div class="edit_part" v-if="dataStatus">
+								<el-button type="primary" icon="edit"  @click="editUserInfo()" v-loading.fullscreen.lock="fullscreenLoading">编辑资料</el-button>
+							</div>
+					    	<form class="form_item" v-if="dataStatus"> 						    		
+								<div class="form_child" v-for="(value,index) in userInfo">
+									<label class="form_child_label">{{value.name|infoFilter}}</label>
+									<div class="form_child_input">
+										<span class="form_child_content">{{value.value}}</span>
+									</div>
+								</div>
+							</form>						
+					    	<form class="form_item" v-if="!dataStatus"> 
+								<div class="form_child" v-for="(item,index) in userInfoEdit">
+									<label class="form_child_label">{{item.name|infoFilter}}</label>
+									<div class="form_child_input">
+										<el-input
+										  placeholder="请输入内容"
+										  v-model="item.value"
+										  :disabled="item.isLocked">
+										</el-input>
+									</div>
+								</div>								
+								<div class="submit_part">
+									<el-button type="primary" @click="saveUserInfo()" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+									<el-button @click="dataStatus=!dataStatus">取消</el-button>
+								</div>
+							</form>
+					    </el-tab-pane>
+					    <el-tab-pane label="修改密码" name="second">
+					    	<form class="form_item">
+					    		<div class="form_child">
+									<label class="form_child_label">旧密码</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" type="password" v-model="origPwd" :class=[{"has-error":origPwdErrorStatus}]>
+										<span class="has-error-text2" v-if="origPwdErrorStatus">{{origPwdErrorText}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">新密码</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" type="password" v-model="newPwd" :class=[{"has-error":newPwdErrorStatus}]>
+										<span class="has-error-text2" v-if="newPwdErrorStatus">{{newPwdErrorText}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">确认密码</label>
+									<div class="form_child_input">
+										<input class="el-input__inner" type="password" v-model="cfmPwd" :class=[{"has-error":cfmPwdErrorStatus}]>
+										<span class="has-error-text2" v-if="cfmPwdErrorStatus">{{cfmPwdErrorText}}</span>
+									</div>
+								</div>
+								<div class="submit_part">
+									<el-button type="primary" @click="savePwd">保存</el-button>
+									<el-button @click="cancelPwd">取消</el-button>
+								</div>
+					    	</form>
+					    </el-tab-pane>
+					  </el-tabs>
+					</template>				
+				</div>
+				<div v-show="!isActive">
+					<div v-if="requsetStatus">
+						<div class="remind_title2">我的权限</div>
+						<template>
+						  <el-table :data="tableData" style="width: 100%">
+						    <el-table-column type="expand">
+						      <template scope="props">
+						        <el-form label-position="left" inline class="demo-table-expand">
+						          <el-form-item label="历史申请单" class="design_label">				 
+						          </el-form-item>
+						          <div class="el_form_child" v-for="(value,index) in props.row.data">
+							          <el-form-item width="150">
+							            <span>{{ index+1 }}</span>
+							          </el-form-item>
+							          <el-form-item>
+							 			<span>{{ value.menuNum }}</span>
+							          </el-form-item>
+							          <el-form-item width="200">
+										<span>{{value.menuStatus|limitCheck}}</span>
+							          </el-form-item>
+							          <el-form-item width="300">
+							       		<span><el-button size="small" @click="checkRequsetNote(value.menuNum)">查看</el-button><el-button size="small" v-if="!value.menuStatus==1">撤回</el-button></span>
+							          </el-form-item>
+						          </div>
+						        </el-form>
+						      </template>
+						    </el-table-column>
+						    <el-table-column type="index" width="50">
+						    </el-table-column>
+						    <el-table-column label="系统名称" prop="name" min-width="400">
+						    </el-table-column>
+						     <el-table-column label="权限" width="200">
+						     	<template scope="scope">
+						     		<i :class="{limit_process:scope.row.status===0,limit_pass:scope.row.status===1,limit_fail:scope.row.status===2}"></i>
+						     	</template>
+						    </el-table-column>
+						    <el-table-column label="状态" width="300">
+						    	<template scope="scope">
+						     		{{scope.row.status|limitCheck}}
+						     	</template>
+						    </el-table-column>
+						  </el-table>
+						</template>
+						<div class="remind_title2">如何申请权限</div>
+						<div class="explain_text" style="line-height:36px;">登录对应的子系统后，将自动跳转到权限申请页</div>
+						<div class="explain_text" style="line-height:20px;">例：申请“龙文钢材网”的权限步骤</div>
+						<div class="explain_text" style="line-height:20px;text-indent:2em">1.打开龙文钢材网</div>
+						<div class="explain_text" style="line-height:20px;text-indent:2em">2.使用会员账号登录</div>
+						<div class="explain_text" style="line-height:20px;text-indent:2em">3.根据提示申请权限</div>
+					</div>
+					<div v-if="!requsetStatus">
+						<div v-if="limitStatus">
+							<div class="remind_title2">
+								查看申请单	
+								<el-button type="primary" size="small" icon="search" @click="requsetStatus=!requsetStatus" style="position:absolute;right:0;top:-10px;">返回</el-button>
+							</div>
+							<form class="form_item2"> 						    		
+								<div class="form_child">
+									<label class="form_child_label">单号</label>
+									<div class="form_child_input">
+										<span class="form_child_content">{{requsetInfo.applyOrderNum}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">申请时间</label>
+									<div class="form_child_input">
+										<span class="form_child_content">{{requsetInfo.applyTime}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">状态</label>
+									<div class="form_child_input">
+										<span class="form_child_content">{{requsetInfo.applyStatus|limitCheck}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">原因</label>
+									<div class="form_child_input">
+										<span class="form_child_content">{{requsetInfo.applyFailCause|contentCheck}}</span>
+									</div>
+								</div>
+								<div class="form_child">
+									<label class="form_child_label">图片实例</label>
+									<div class="form_child_input">
+										<span class="ex_img" v-for="(value,index) in requsetInfo.menuImg"><img :src="value"></span>
+										<span  v-if="requsetInfo.menuImg===''||JSON.stringify(requsetInfo.menuImg) === '[]'||requsetInfo.menuImg===undefined">无</span>
+									</div>
+								</div>
+								<div class="form_child" v-for="(value,index) in requsetInfo.data">
+									<label class="form_child_label">{{value.name|infoFilter}}</label>
+									<div class="form_child_input">
+										<span class="form_child_content" >
+											{{value.value}}
+										</span>
+									</div>
+								</div>
+							</form>	
+						</div>
+						<div v-if="!limitStatus">
+							<div class="remind_title2" style="margin-bottom:40px;">
+								申请权限
+							</div>
+							<form class="form_item"> 						    		
+								<div class="form_child" v-for="(value,index) in applyData"> 
+									<div v-if="value.type==='input'">
+										<label class="form_child_label">{{value.property}}</label>
+										<div class="form_child_input">
+											<input class="el-input__inner" v-model="value.content">
+										</div>
+									</div>
+									<div v-if="value.type==='textarea'">
+										<label class="form_child_label">{{value.property}}</label>
+										<div class="form_child_input">
+											<textarea class="el-textarea__inner" v-model="value.content"></textarea>
+										</div>
+									</div>
+									<div v-if="value.type==='img'">
+										<label class="form_child_label">{{value.property}}</label>
+										<div class="form_child_input">									
+											<el-upload
+											  action="https://jsonplaceholder.typicode.com/posts/"
+											  list-type="picture-card"
+											  :on-preview="handlePictureCardPreview"
+											  :on-remove="handleRemove"
+											  :on-success="handleSuccess"
+											  :on-error="handleFail">
+											  <i class="el-icon-plus"></i>
+											</el-upload>
+											<el-dialog v-model="dialogVisible" size="tiny">
+											  <img width="100%" :src="dialogImageUrl" alt="">
+											</el-dialog>
+										</div>
+									</div>
+									<div v-if="value.type==='radio'">
+										<label class="form_child_label">{{value.property}}</label>
+										<div class="form_child_input">
+											<el-switch v-model="value.content" on-text="" off-text on-color="#13ce66"></el-switch>
+										</div>
+									</div>
+								</div>
+								<div class="submit_part">
+									<el-button type="primary" @click="saveApplyData">保存</el-button>
+									<el-button @click="requsetStatus=!requsetStatus,limitStatus=!limitStatus">取消</el-button>
+								</div>
+							</form>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/vue.js"></script> 
+		<script src="js/axios.js"></script>
+		<script src="js/index.js"></script>	
+		<script src="js/center.js"></script>
+	</body>
+</html>

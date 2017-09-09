@@ -1,0 +1,68 @@
+{"status":0,
+"tableData": [
+ 	 {"id": "12987122",
+	  "name": "会员中心",
+	  "limit":"",
+	  "status":1,
+	  "data":[{
+	  	"menuNum":20170720001,
+	  	"menuStatus":1,
+	  	"menuTime":"2017-7-20 12:00",
+	  	"menuReason":"",
+	  	"menuInfo":"这是说明信息1",
+	  	"menuImg":["img/v-icon.png","img/x-icon.png"]
+	    },{
+	  	"menuNum":20170721002,
+	  	"menuStatus":0,
+	  	"menuTime":"2017-7-21 12:00",
+	  	"menuReason":"没有原因",
+	  	"menuInfo":"这是说明信息2",
+	  	"menuImg":[]
+	    },{
+	  	"menuNum":20170720003,
+	  	"menuStatus":2,
+	  	"menuTime":"2017-7-22 12:00",
+	  	"menuReason":"这是原因",
+	  	"menuInfo":"这是说明信息3",
+	  	"menuImg":""
+	  }]
+	}, {
+	  "id": "12987123",
+	  "name":"龙文钢材网",
+	  "limit":"",
+	  "status":2
+	}, {
+	  "id": "12987125",
+	  "name": "经销系统",
+	  "limit":"",
+	  "status":0
+	}, {
+	  "id": "12987126",
+	  "name": "仓储系统",
+	  "limit":"",
+	  "status":1
+	}],
+ "userInfo":[{
+	 	"name":"userName",
+	 	"value":"张三"
+	 },{
+	 	"name":"mobliePhone",
+	 	"value":13955512345
+	 },{
+	 	"name":"email",
+	 	"value":"cqlw@aaa.com"
+	 },{
+	 	"name":"companyName",
+	 	"value":"重庆文迅科技股份有限公司"
+	 },{
+	 	"name":"contactPeople",
+	 	"value":"李四"
+	 },{
+	 	"name":"address",
+	 	"value":"重庆市大渡口区"
+	 },{
+	 	"name":"contactTel",
+	 	"value":18755512345
+	 }]
+
+}

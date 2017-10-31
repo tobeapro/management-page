@@ -23,7 +23,17 @@ new Vue({
 	    tableData:[],
 	    applyData:[],	
 	    dialogImageUrl: '',
-        dialogVisible: false
+        dialogVisible: false,
+        uploadImgUrl:[],
+        dialogChangeInfo:false, //编辑手机或邮箱的信息弹框
+        dialogChangeTitle:'',
+        verWay:'1',//验证方式
+        verActive:1,//验证进度
+        verCode:'',//验证码
+        changeType:'',//被修改的类型，手机或者邮箱
+        changeVal:'',//被修改的内容，手机号或者邮箱号
+        newPhone:'',//新手机号
+        newMail:''//新邮箱号
       }
     },
     mounted:function(){
@@ -257,7 +267,178 @@ new Vue({
   				_this.fullscreenLoading=false;
  				_this.$message.error("查看失败");		
     		})
-    	}			    	
+    	},
+    	//修改信息
+    	changeInfoItem:function(obj){
+    		var _this=this;
+    		if(obj.name==='mobliePhone'){
+    			_this.dialogChangeTitle="修改手机号"
+    			_this.changeType='phone'
+    		}else if(obj.name==='email'){
+    			_this.dialogChangeTitle="修改邮箱号"
+    			_this.changeType='mail'
+    		}
+    		_this.changVal=obj.value;
+    		_this.verCode="";
+    		_this.newPhone='';
+    		_this.newMail='';
+    		_this.verWay='1';
+    		_this.verActive=1;
+    		_this.dialogChangeInfo=true;
+    	},
+    	//发送验证码
+    	sendVerCode:function(){
+    		var _this=this;
+    		var val=_this.changeVal;
+    		_this.fullscreenLoading=true;
+    		if(_this.changeType==="phone"){
+    			//短信地址
+    			axios.post('/register/sendSms',{'phone':val})
+    			.then(function(res){
+    				if(res.data.status===0){
+    					_this.fullscreenLoading=false;
+    					_this.$message.success('发送成功');
+    					_this.verActive++;
+    				}else{
+    					_this.fullscreenLoading=false;
+    					_this.$message.error('发送失败');
+    				}
+    			})
+    			.catch(function(res){
+    				_this.fullscreenLoading=false;
+    					_this.$message.success('发送成功');
+    					_this.verActive++;
+//  				_this.fullscreenLoading=false;
+//  				_this.$message.error('发送失败');
+    			})
+    		}else if(_this.changeType==="mail"){
+    			//邮箱地址
+    			axios.post('/register/sendSms',{'mail':val}) 
+    			.then(function(res){
+    				if(res.data.status===0){
+    					_this.fullscreenLoading=false;
+    					_this.$message.success('发送成功');
+    					_this.verActive++;
+    				}else{
+    					_this.fullscreenLoading=false;
+    					_this.$message.error('发送失败');
+    				}
+    			})
+    			.catch(function(res){
+    				_this.fullscreenLoading=false;
+    				_this.$message.error('发送失败');
+    			})
+    		}
+    	},
+    	//确认验证码
+    	confirmVerCode:function(){
+    		var _this=this;
+    		var code=_this.verCode;
+    		var val=_this.changeVal;
+    		if(code==""){
+    			_this.$message.error('请输入验证码');
+    			return
+    		}
+    		if(code.toString().length!==6||!/^[0-9]*$/.test(code)){
+    			_this.$message.error('验证码为6位的数字');
+    			return
+    		}
+    		if(_this.changeType==="phone"){
+    			//短信地址
+    			_this.fullscreenLoading=true;
+    			axios.post('/register/sendSms',{'phone':val,'ver':code})
+    			.then(function(res){
+    				if(res.data.status===0){
+    					_this.fullscreenLoading=false;
+    					_this.$message.success('验证成功');
+    					_this.verActive++;
+    				}else{
+    					_this.fullscreenLoading=false;
+    					_this.$message.error('验证失败');
+    				}
+    			})
+    			.catch(function(res){
+    				_this.fullscreenLoading=false;
+    				_this.$message.error('验证失败');
+    			})
+    		}else if(_this.changeType==="mail"){
+    			//邮箱地址
+    			_this.fullscreenLoading=true;
+    			axios.post('/register/sendSms',{'mail':val,'ver':code}) 
+    			.then(function(res){
+    				if(res.data.status===0){
+    					_this.fullscreenLoading=false;
+    					_this.$message.success('验证成功');
+    					_this.verActive++;
+    				}else{
+    					_this.fullscreenLoading=false;
+    					_this.$message.error('验证失败');
+    				}
+    			})
+    			.catch(function(res){
+    				_this.fullscreenLoading=false;
+    				_this.$message.error('验证失败');
+    			})
+    		}
+    	},
+    	//确认新手机号
+    	confirmNewPhone:function(){
+    		var _this=this;
+    		var phone=_this.newPhone;
+    		if(phone==""){
+    			_this.$message.error('请输入新手机号');
+    			return
+    		}
+    		if(!/^1(3|4|5|7|8)\d{9}$/.test(phone)){
+    			_this.$message.error('手机号不合法');
+    			return
+    		}
+    		_this.fullscreenLoading=true;
+    		axios.post("/url",{'newPhone':phone})
+    		.then(function(res){
+    			if(res.data.status===0){
+    				_this.fullscreenLoading=false;
+    				_this.$message.success('修改成功');
+    				_this.dialogChangeInfo=false;  				
+    			}else{
+    				_this.fullscreenLoading=false;
+    				_this.$message.error('修改失败');
+    			}
+    		})
+    		.catch(function(res){
+    			_this.fullscreenLoading=false;
+    			_this.$message.error('修改失败');
+    		})
+    	},
+    	//确认新邮箱号
+    	confirmNewMail:function(){
+    		var _this=this;
+    		var mail=_this.newMail;
+    		if(mail==""){
+    			_this.$message.error('请输入新邮箱号');
+    			return
+    		}
+    		if(!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(mail)){
+    			_this.$message.error('邮箱号不合法');
+    			return
+    		}
+    		_this.fullscreenLoading=true;
+    		axios.post("/url",{'newMail':mail})
+    		.then(function(res){
+    			if(res.data.status===0){
+    				_this.fullscreenLoading=false;
+    				_this.$message.success('修改成功');
+    				_this.dialogChangeInfo=false;  				
+    			}else{
+    				_this.fullscreenLoading=false;
+    				_this.$message.error('修改失败');
+    			}
+    		})
+    		.catch(function(res){
+    			_this.fullscreenLoading=false;
+    			_this.$message.error('修改失败');
+    		})
+    	},
     },
     filters:{
     	infoFilter:function(name){
@@ -279,6 +460,16 @@ new Vue({
     			case "contactTel":return "联系电话";
     			break;
     			case "businessNumber":return "企业编号";
+    			break;
+    			case "companyLtd":return "公司简称";
+    			break;
+    			case "contactFax":return "传真";
+    			break;
+    			case "bankName":return "开户银行";
+    			break;
+    			case "accountName":return "收款账户名";
+    			break;
+    			case "accountNumber":return "收款账号";
     			break;
     			default:return name;
     		}

@@ -42,12 +42,16 @@
 					    	<form class="form_item" v-if="!dataStatus"> 
 								<div class="form_child" v-for="(item,index) in userInfoEdit">
 									<label class="form_child_label">{{item.name|infoFilter}}</label>
-									<div class="form_child_input">
+									<div class="form_child_input" v-if="item.type!='images'&&item.type!='city'&&item.type!='textarea'">
 										<el-input
 										  placeholder="请输入内容"
 										  v-model="item.value"
 										  :disabled="item.isLocked">
-										</el-input>
+										</el-input>							
+									</div>
+									<span class="form_child_handle" v-if="item.name==='mobliePhone'||item.name==='email'" @click="changeInfoItem(item)">修改</span>
+									<div class="form_child_input" v-if="item.type==='textarea'">
+										<textarea class="el-textarea__inner" v-model="item.value"></textarea>
 									</div>
 								</div>								
 								<div class="submit_part">
@@ -237,6 +241,73 @@
 					</div>
 				</div>
 			</div>
+			<el-dialog :title="dialogChangeTitle" :visible.sync="dialogChangeInfo" size="large">
+				<el-steps :space="100" :active="verActive" style="margin-top:0">
+				  <el-step title="修改方式"></el-step>
+				  <el-step title="验证"></el-step>
+				  <el-step title="确认"></el-step>
+				</el-steps>
+				<div v-if="verActive===1">
+					<el-radio class="radio" v-model="verWay" label="1">验证手机号</el-radio>
+	  				<el-radio class="radio" v-model="verWay" label="2">验证邮箱</el-radio>
+			    	<div class="modal-ver-footer">
+					    <el-button @click="dialogChangeInfo = false">取 消</el-button>
+					    <el-button type="primary" @click="sendVerCode">发送验证码</el-button>
+				  	</div>
+  				</div>
+  				<div v-if="verActive===2">
+  					<div v-if="verWay==='1'">
+						<div class="el-form-item">
+							<div class="el-form-item__label" style="width:100px;">验证码</div>
+							<div class="el-form-item__content" style="margin-left:100px;">
+			  					<div class="el-input el-input-group el-input-group--append">
+			  						<input autocomplete="off" placeholder="请输入手机短信中的验证码" type="text" validateevent="true" class="el-input__inner" v-model="verCode">
+			  					</div>
+		  					</div>		  					
+	  					</div>
+  					</div>
+  					<div v-if="verWay==='2'">
+  						<div class="el-form-item">
+	  						<div class="el-form-item__label" style="width:100px;">验证码</div>
+							<div class="el-form-item__content" style="margin-left:100px;">
+			  					<div class="el-input el-input-group el-input-group--append">
+			  						<input autocomplete="off" placeholder="打开邮箱获取验证码" type="text" validateevent="true" class="el-input__inner" v-model="verCode">
+			  					</div>
+		  					</div>
+		  				</div>				
+  					</div>
+					<div class="modal-ver-footer">
+					    <el-button @click="dialogChangeInfo = false">取 消</el-button>
+					    <el-button type="primary" @click="confirmVerCode">确认</el-button>
+				  	</div>
+  				</div>
+  				<div v-if="verActive===3">
+  					<div v-if="changeType==='phone'">
+  						<div class="el-form-item__label" style="width:100px;">新手机号</div>
+						<div class="el-form-item__content" style="margin-left:100px;">
+		  					<div class="el-input el-input-group el-input-group--append">
+		  						<input autocomplete="off" placeholder="请输入新的手机号" type="text" validateevent="true" class="el-input__inner" v-model="newPhone">
+		  					</div>
+	  					</div>
+	  					<div class="modal-ver-footer">
+						    <el-button @click="dialogChangeInfo = false">取 消</el-button>
+						    <el-button type="primary" @click="confirmNewPhone">确认</el-button>
+					  	</div>	
+  					</div>
+  					<div v-if="changeType==='mail'">
+  						<div class="el-form-item__label" style="width:100px;">新邮箱号</div>
+						<div class="el-form-item__content" style="margin-left:100px;">
+		  					<div class="el-input el-input-group el-input-group--append">
+		  						<input autocomplete="off" placeholder="请输入新的邮箱号" type="text" validateevent="true" class="el-input__inner" v-model="newMail">
+		  					</div>
+	  					</div>
+	  					<div class="modal-ver-footer">
+						    <el-button @click="dialogChangeInfo = false">取 消</el-button>
+						    <el-button type="primary" @click="confirmNewMail">确认</el-button>
+					  	</div>	
+  					</div>
+  				</div>
+			</el-dialog>
 		</div>
 		<script src="js/vue.js"></script> 
 		<script src="js/axios.js"></script>

@@ -1,32 +1,23 @@
 {
 "status":0,
-"userInfo":[{
-	 	"name":"userName",
-	 	"value":"张三",
-	 	"isLocked":true
-	 },{
-	 	"name":"mobliePhone",
-	 	"value":13955512345,
-	 	"isLocked":true
-	 },{
-	 	"name":"email",
-	 	"value":"cqlw@aaa.com",
-	 	"isLocked":true
-	 },{
-	 	"name":"companyName",
-	 	"value":"重庆文迅科技股份有限公司",
-	 	"isLocked":false
-	 },{
-	 	"name":"contactPeople",
-	 	"value":"李四",
-	 	"isLocked":false
-	 },{
-	 	"name":"address",
-	 	"value":"重庆市大渡口区",
-	 	"isLocked":false
-	 },{
-	 	"name":"contactTel",
-	 	"value":18755512345,
-	 	"isLocked":false
-	 }]
+"userInfo":[
+ {"name":"userName","value":"yangbo","isLocked":true},
+ {"name":"email","value":"2466054610@qq.com","type":"modifiable","isLocked":true},
+ {"name":"mobliePhone","value":"13629745391","type":"modifiable","isLocked":true},
+ {"name":"companyName","value":null,"isLocked":false},
+ {"name":"city","value":{"area":{"id":"1","name":"重庆市"},"city":"渝北"},"type":"city","isLocked":false},
+ {"name":"address","value":null,"isLocked":false},
+ {"name":"contactTel","value":null,"isLocked":false},
+ {"name":"contactPeople","value":null,"isLocked":false},
+ {"name":"contactPost","value":null,"isLocked":false},
+ {"name":"scopeBusiness","value":null,"isLocked":false},
+ {"name":"introduction","value":null,"type":"textarea","isLocked":false},
+ {"name":"businessNumber","value":null,"isLocked":false},
+ {"name":"remark","value":null,"isLocked":false},
+ {"name":"companyLtd","value":null,"isLocked":false},
+ {"name":"contactFax","value":null,"isLocked":false},
+ {"name":"bankName","value":"6CE17190689CB795E7DC54E1AE57582EE8729C467E7C599B","isLocked":false},
+ {"name":"accountName","value":"865F6A8584DAD34E0B5BEA8576CA6CB720A84F83B201F6E4442A3262DFAE27B8","isLocked":false},
+ {"name":"accountNumber","value":"B1C474F388732E874E6A93D31196F05F72EDCFFBE17ED6BD","isLocked":false}
+ ]
 }

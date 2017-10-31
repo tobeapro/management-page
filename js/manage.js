@@ -29,7 +29,7 @@ new Vue({
 	    formLabelWidth: '120px'
     	}
     },
-    mounted:function(){
+    beforeCreate:function(){
     	var _this=this;
     	axios.get("data4.json")
     	.then(function(res){

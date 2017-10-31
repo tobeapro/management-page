@@ -506,3 +506,24 @@ body{
 .el-dialog{
 	width:460px;
 }
+.form_child_input{
+	float:left;
+	line-height:36px;
+	width:320px;
+}
+.form_child_handle{
+	float:right;
+	width:30px;
+	line-height:36px;
+	color:#20a0ff;
+	text-align:right;	
+	cursor:pointer;
+}
+.form_child_handle:hover{
+	color:#207dd3;
+}
+.modal-ver-footer{
+	padding: 10px 20px 15px;
+    text-align: right;
+    box-sizing: border-box
+}
